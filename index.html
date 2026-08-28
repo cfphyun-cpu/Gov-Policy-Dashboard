@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>정부지원사업그룹 - 정부부처별 보도자료 모니터링</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    * { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+  <!-- 헤더 영역 -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+            <i class="ph-bold ph-shield-check text-xl"></i>
+          </span>
+          <h1 class="text-xl font-bold text-slate-900">정부지원사업그룹 - 정부부처별 보도자료 모니터링</h1>
+          <span class="bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-blue-200">3차 검증 완료</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">고용부 · 과기부 · 중기부 · 산업부 · 산업통상부 · 교육부 · <strong>재경부</strong> · 행안부 · <strong>직업능력심사평가원</strong> 통합 현황 (총 9개 기관)</p>
+      </div>
+      <div class="flex items-center gap-2 self-end sm:self-auto">
+        <button id="copySlackBtn" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+          <i class="ph-bold ph-share-network"></i>
+          <span>본문내용 요약 및 복사</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- 상단 핵심 지표 카드 -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+        <p class="text-xs font-medium text-slate-500">당일 신규 안건</p>
+        <div class="flex items-baseline justify-between mt-2">
+          <span id="stat-total" class="text-2xl font-bold text-slate-900">0</span>
+          <span class="text-xs text-slate-400 font-medium">건</span>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+        <p class="text-xs font-medium text-teal-600">심평원 / KDT·AI캠퍼스</p>
+        <div class="flex items-baseline justify-between mt-2">
+          <span id="stat-ksqa" class="text-2xl font-bold text-teal-700">0</span>
+          <span class="text-xs text-teal-400 font-medium">건</span>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+        <p class="text-xs font-medium text-blue-600">AI · 첨단 신기술</p>
+        <div class="flex items-baseline justify-between mt-2">
+          <span id="stat-ai" class="text-2xl font-bold text-blue-700">0</span>
+          <span class="text-xs text-blue-400 font-medium">건</span>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+        <p class="text-xs font-medium text-slate-400">신규 발표 없음</p>
+        <div class="flex items-baseline justify-between mt-2">
+          <span id="stat-empty" class="text-2xl font-bold text-slate-500">0</span>
+          <span class="text-xs text-slate-400 font-medium">개 기관</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 필터 및 검색 컨트롤러 -->
+    <section class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+      <!-- 검색바 -->
+      <div class="relative">
+        <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input type="text" id="searchInput" placeholder="키워드 검색 (예: 심평원, 재경부, 행안부, KDT, AI 캠퍼스, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
+      </div>
+
+      <!-- 기관 및 부처 선택 탭 (총 9개 기관) -->
+      <div>
+        <label class="block text-xs font-bold text-slate-500 mb-2">기관 및 부처별 필터</label>
+        <div id="ministryTabs" class="flex flex-wrap gap-1.5 text-xs font-medium">
+          <button class="ministry-btn active px-3 py-1.5 rounded-lg border transition bg-blue-600 text-white border-blue-600" data-value="all">전체 기관 (9)</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-teal-50 text-teal-800 border-teal-300 hover:bg-teal-100 font-bold" data-value="직업능력심사평가원">직업능력심사평가원</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="과기정통부">과기정통부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="중소벤처기업부">중소벤처기업부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="고용노동부">고용노동부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="산업통상자원부">산업통상자원부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="산업통상부">산업통상부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="교육부">교육부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="재경부">재경부</button>
+          <button class="ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="행정안전부">행정안전부</button>
+        </div>
+      </div>
+
+      <!-- 분야별 필터 -->
+      <div>
+        <label class="block text-xs font-bold text-slate-500 mb-2">분야별 필터</label>
+        <div id="categoryPills" class="flex flex-wrap gap-1.5 text-xs font-medium">
+          <button class="category-btn active px-2.5 py-1 rounded-full border transition bg-slate-900 text-white border-slate-900" data-value="all">전체</button>
+          <button class="category-btn px-2.5 py-1 rounded-full border transition bg-white text-teal-700 border-teal-200 hover:bg-teal-50" data-value="K-DT·AI캠퍼스">K-DT · AI캠퍼스</button>
+          <button class="category-btn px-2.5 py-1 rounded-full border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="AI·신기술">AI · 첨단 신기술</button>
+          <button class="category-btn px-2.5 py-1 rounded-full border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="인재양성·대학">인재양성 · 대학</button>
+          <button class="category-btn px-2.5 py-1 rounded-full border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="창업·스타트업">창업 · 스타트업</button>
+          <button class="category-btn px-2.5 py-1 rounded-full border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="청년·일자리">청년 · 일자리</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 정책/공고 카드 그리드 -->
+    <section>
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-sm font-bold text-slate-700">모니터링 현황 (<span id="resultCount" class="text-blue-600">0</span>건)</h2>
+      </div>
+      <div id="cardGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- 동적 렌더링 -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 복사 알림 토스트 -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2.5 rounded-lg shadow-lg text-xs font-medium flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-200 z-50">
+    <i class="ph-bold ph-check-circle text-emerald-400 text-base"></i>
+    <span id="toastMsg">본문 내용 요약이 클립보드에 복사되었습니다!</span>
+  </div>
+
+  <script>
+    // 3차 교차 검증 완료 데이터셋 (총 9개 기관: 산업통상부 독립 추가 및 재경부 변경 반영)
+    const policyData = [
+      {
+        id: 1,
+        ministry: '직업능력심사평가원',
+        category: 'K-DT·AI캠퍼스',
+        hasUpdate: true,
+        actualDate: '2026.08.28',
+        title: '2026년도 하반기 K-디지털 트레이닝(K-DT) 신규 훈련과정 공모 및 AI 캠퍼스 심사 계획',
+        summary: [
+          '심사평가공고 > K-디지털 트레이닝 구분 공고 심사 절차 개시',
+          '생성형 AI, 피지컬 AI, 로봇 등 첨단 융합 훈련과정 및 기업 맞춤형 트랙 평가',
+          'AI 캠퍼스 등 디지털 핵심 실무인재 양성 인프라 적합성 심사'
+        ],
+        support: '훈련비 100% 국비 지원 및 AI 실습 인프라 심사 연계',
+        link: 'https://www.ksqa.or.kr'
+      },
+      {
+        id: 2,
+        ministry: '과기정통부',
+        category: 'AI·신기술',
+        hasUpdate: true,
+        actualDate: '2026.08.27',
+        title: '2026년도 국가 R&D 예산안 첨단 AI·바이오 투자 확대',
+        summary: [
+          '3대 게임체인저(AI·반도체, 바이오, 양자) 및 피지컬 AI 집중 투자',
+          '국가 AI 컴퓨팅 인프라(AIDC) 확충 및 석·박사 AX 고급인력 양성'
+        ],
+        support: 'AIDC 컴퓨팅 자원 및 차세대 R&D 바우처 연계',
+        link: 'https://www.msit.go.kr/contents/cont.do?sCode=user&mPid=340&mId=353'
+      },
+      {
+        id: 3,
+        ministry: '중소벤처기업부',
+        category: '창업·스타트업',
+        hasUpdate: true,
+        actualDate: '2026.08.27',
+        title: '글로벌 펀드 결성 및 「모두의 창업 프로젝트」 1만 명 접수',
+        summary: [
+          '청년·예비창업자 1만 명 규모 선발 접수 진행 중',
+          '170개 전문 보육기관 멘토링 결합 및 글로벌 펀드 투자 연계'
+        ],
+        support: '1인당 활동비 200만 원 지원',
+        link: 'https://www.mss.go.kr/site/smba/ex/bbs/View.do?cbIdx=86&bcIdx=1070366'
+      },
+      {
+        id: 4,
+        ministry: '고용노동부',
+        category: 'K-DT·AI캠퍼스',
+        hasUpdate: true,
+        actualDate: '2026.08.27',
+        title: '2학기 K-디지털 트레이닝(KDT) 훈련과정 및 청년 일경험 매칭',
+        summary: [
+          '첨단·디지털 분야 벤처·스타트업 아카데미 집중 훈련생 모집 점검',
+          '민간 주도 청년 일경험(인턴십) 패스트트랙 운영'
+        ],
+        support: '훈련비 100% 국비 지원 + 청년도약장려금',
+        link: 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=19808'
+      },
+      {
+        id: 5,
+        ministry: '산업통상자원부',
+        category: '일반',
+        hasUpdate: false,
+        actualDate: '2026.08.28 검증',
+        title: '당일 지정 키워드 관련 신규 보도자료 없음',
+        summary: [
+          '최근 1일간 취업·창업·AI·인재양성 관련 신규 공식 발표 없음',
+          '공식 보도자료 게시판 3차 교차 검증 완료'
+        ],
+        support: '-',
+        link: 'https://www.motie.go.kr/kor/article/ATCL3f49a5a1c'
+      },
+      {
+        id: 6,
+        ministry: '산업통상부',
+        category: '일반',
+        hasUpdate: false,
+        actualDate: '2026.08.28 검증',
+        title: '당일 지정 키워드 관련 신규 보도자료 없음',
+        summary: [
+          '최근 1일간 산업 통상·수출·첨단 소부장 분야 신규 보도자료 없음',
+          '공식 보도자료 게시판 3차 교차 검증 완료'
+        ],
+        support: '-',
+        link: 'https://www.motie.go.kr/kor/article/ATCL3f49a5a1c'
+      },
+      {
+        id: 7,
+        ministry: '교육부',
+        category: '일반',
+        hasUpdate: false,
+        actualDate: '2026.08.28 검증',
+        title: '당일 지정 키워드 관련 신규 보도자료 없음',
+        summary: [
+          '최근 1일간 대학·부트캠프·인재양성 관련 신규 공식 발표 없음',
+          '공식 보도자료 게시판 3차 교차 검증 완료'
+        ],
+        support: '-',
+        link: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&lev=0&statusYN=W&s=moe&m=020402&opType=N&boardSeq=105939'
+      },
+      {
+        id: 8,
+        ministry: '재경부',
+        category: '일반',
+        hasUpdate: false,
+        actualDate: '2026.08.28 검증',
+        title: '당일 지정 키워드 관련 신규 보도자료 없음',
+        summary: [
+          '최근 1일간 청년·일자리·스타트업 세제 관련 신규 공식 발표 없음',
+          '공식 보도자료 게시판 3차 교차 검증 완료'
+        ],
+        support: '-',
+        link: 'https://www.moef.go.kr/nw/nes/nesdta.do'
+      },
+      {
+        id: 9,
+        ministry: '행정안전부',
+        category: '일반',
+        hasUpdate: false,
+        actualDate: '2026.08.28 검증',
+        title: '당일 지정 키워드 관련 신규 보도자료 없음',
+        summary: [
+          '최근 1일간 디지털정부·공공데이터·청년마을 일자리 관련 신규 발표 없음',
+          '공식 보도자료 게시판 3차 교차 검증 완료'
+        ],
+        support: '-',
+        link: 'https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardList.do?bbsId=BBSMSTR_000000000008'
+      }
+    ];
+
+    const ministryColorMap = {
+      '직업능력심사평가원': 'bg-teal-50 text-teal-800 border-teal-300 font-bold',
+      '과기정통부': 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      '중소벤처기업부': 'bg-amber-50 text-amber-700 border-amber-200',
+      '고용노동부': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      '산업통상자원부': 'bg-blue-50 text-blue-700 border-blue-200',
+      '산업통상부': 'bg-cyan-50 text-cyan-700 border-cyan-200',
+      '교육부': 'bg-purple-50 text-purple-700 border-purple-200',
+      '재경부': 'bg-slate-100 text-slate-700 border-slate-300',
+      '행정안전부': 'bg-rose-50 text-rose-700 border-rose-200'
+    };
+
+    let currentMinistry = 'all';
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    const cardGrid = document.getElementById('cardGrid');
+    const resultCount = document.getElementById('resultCount');
+    const searchInput = document.getElementById('searchInput');
+
+    function updateStats() {
+      const activeItems = policyData.filter(d => d.hasUpdate);
+      document.getElementById('stat-total').innerText = activeItems.length;
+      document.getElementById('stat-ksqa').innerText = activeItems.filter(d => d.ministry === '직업능력심사평가원' || d.category === 'K-DT·AI캠퍼스').length;
+      document.getElementById('stat-ai').innerText = activeItems.filter(d => d.category === 'AI·신기술').length;
+      document.getElementById('stat-empty').innerText = policyData.filter(d => !d.hasUpdate).length;
+    }
+
+    function renderCards() {
+      const filtered = policyData.filter(item => {
+        const matchMinistry = currentMinistry === 'all' || item.ministry === currentMinistry;
+        const matchCategory = currentCategory === 'all' || item.category === currentCategory;
+        const matchSearch = searchQuery === '' || 
+          item.title.toLowerCase().includes(searchQuery) ||
+          item.summary.some(s => s.toLowerCase().includes(searchQuery)) ||
+          item.ministry.toLowerCase().includes(searchQuery);
+        return matchMinistry && matchCategory && matchSearch;
+      });
+
+      resultCount.innerText = filtered.length;
+
+      cardGrid.innerHTML = filtered.map(item => {
+        if (!item.hasUpdate) {
+          return `
+            <div class="bg-slate-100/70 rounded-xl border border-dashed border-slate-300 p-5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2.5">
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-md border ${ministryColorMap[item.ministry] || 'bg-slate-100 text-slate-600'}">
+                    ${item.ministry}
+                  </span>
+                  <span class="text-xs font-semibold text-slate-400 bg-slate-200/80 px-2 py-0.5 rounded-full">${item.actualDate}</span>
+                </div>
+                <h3 class="text-sm font-semibold text-slate-600 leading-snug mb-3">
+                  ${item.title}
+                </h3>
+                <ul class="space-y-1.5 mb-4 text-xs text-slate-500">
+                  ${item.summary.map(s => `
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-slate-400">•</span>
+                      <span>${s}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+              <div class="pt-3 border-t border-slate-200/70 flex items-center justify-between text-xs">
+                <span class="text-slate-400 font-medium">검증 완료</span>
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-medium text-slate-600 hover:text-slate-900">
+                  게시판 바로가기
+                  <i class="ph-bold ph-arrow-up-right"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="bg-white rounded-xl border ${item.ministry === '직업능력심사평가원' ? 'border-teal-300 ring-1 ring-teal-100 shadow-sm' : 'border-slate-200 shadow-xs'} p-5 flex flex-col justify-between hover:border-slate-400 transition duration-150">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="text-xs px-2 py-0.5 rounded-md border ${ministryColorMap[item.ministry] || 'bg-slate-50 text-slate-600'}">
+                  ${item.ministry}
+                </span>
+                <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200" title="실제 공식 공고/배포일자">
+                  📅 ${item.actualDate}
+                </span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 leading-snug mb-3">
+                ${item.title}
+              </h3>
+              <ul class="space-y-1.5 mb-4 text-xs text-slate-600">
+                ${item.summary.map(s => `
+                  <li class="flex items-start gap-1.5">
+                    <span class="${item.ministry === '직업능력심사평가원' ? 'text-teal-600 font-bold' : 'text-blue-500 font-bold'}">•</span>
+                    <span>${s}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500 font-medium truncate max-w-[170px]" title="${item.support}">
+                💰 ${item.support}
+              </span>
+              <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold ${item.ministry === '직업능력심사평가원' ? 'text-teal-700 hover:text-teal-800' : 'text-blue-600 hover:text-blue-700'}">
+                공고 원문 보기
+                <i class="ph-bold ph-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.querySelectorAll('.ministry-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.ministry-btn').forEach(b => {
+          b.className = 'ministry-btn px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
+        });
+        e.target.className = 'ministry-btn active px-3 py-1.5 rounded-lg border transition bg-blue-600 text-white border-blue-600';
+        currentMinistry = e.target.getAttribute('data-value');
+        renderCards();
+      });
+    });
+
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.category-btn').forEach(b => {
+          b.className = 'category-btn px-2.5 py-1 rounded-full border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
+        });
+        e.target.className = 'category-btn active px-2.5 py-1 rounded-full border transition bg-slate-900 text-white border-slate-900';
+        currentCategory = e.target.getAttribute('data-value');
+        renderCards();
+      });
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderCards();
+    });
+
+    document.getElementById('copySlackBtn').addEventListener('click', () => {
+      const activeList = policyData.filter(d => d.hasUpdate);
+      const emptyList = policyData.filter(d => !d.hasUpdate).map(d => d.ministry);
+
+      let summaryText = `📢 [정부지원사업그룹 - 정부부처 및 심평원 보도자료·공고 모니터링]\n\n`;
+      
+      if (activeList.length > 0) {
+        summaryText += `📌 [신규 보도자료 및 공고 건 (실제 배포일 기준)]\n` + activeList.map((item, idx) => 
+          `${idx + 1}. [${item.ministry}] (${item.actualDate}) ${item.title}\n   • ${item.summary.join('\n   • ')}\n   • 지원: ${item.support}`
+        ).join('\n\n') + `\n\n`;
+      }
+
+      if (emptyList.length > 0) {
+        summaryText += `ℹ️ [신규 발표 없음]\n• ${emptyList.join(', ')}: 최근 1일간 신규 보도자료/공고 없음 (검증 완료)\n`;
+      }
+
+      navigator.clipboard.writeText(summaryText).then(() => {
+        showToast('본문 내용 요약이 클립보드에 복사되었습니다!');
+      });
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    updateStats();
+    renderCards();
+  </script>
+</body>
+</html>
