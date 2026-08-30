@@ -17,7 +17,6 @@
       letter-spacing: -0.06em;
       color: #003B91;
     }
-    /* 가로 스크롤바 숨김 (모바일 탭 바) */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -28,7 +27,6 @@
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
       
-      <!-- 로고 및 서비스 타이틀 -->
       <div class="flex items-center gap-3.5 flex-wrap">
         <a href="https://www.multicampus.com" target="_blank" rel="noopener noreferrer" class="flex items-center pr-3.5 border-r border-slate-200 group">
           <span class="multicampus-ci text-2xl sm:text-[26px] leading-none select-none transition group-hover:opacity-90">multicampus</span>
@@ -43,12 +41,11 @@
           <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5 flex-wrap">
             <span>고용부 · 과기부 · 중소벤처부 · 산업통상부 · 교육부 · 재정경제부 · 행안부 · <strong>직업능력심사평가원</strong> · <strong>한국직업능력연구원</strong></span>
             <span class="hidden sm:inline text-slate-300">|</span>
-            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.08.28 07:00</strong></span>
+            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.08.31 07:00</strong></span>
           </div>
         </div>
       </div>
 
-      <!-- 공유 버튼 -->
       <div class="flex items-center gap-2 self-end md:self-auto shrink-0">
         <button id="copySlackBtn" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-sm transition active:scale-95">
           <i class="ph-bold ph-share-network text-sm"></i>
@@ -94,13 +91,12 @@
 
     <!-- 필터 및 검색 컨트롤러 -->
     <section class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-      <!-- 검색바 -->
       <div class="relative">
         <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
         <input type="text" id="searchInput" placeholder="기관명, 정책명, 키워드 검색 (예: 직업능력심사평가원, KDT, AI캠퍼스, 반도체, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
       </div>
 
-      <!-- 기관 및 부처 선택 탭 (그룹화 및 모바일 가로 스크롤 지원) -->
+      <!-- 기관 및 부처 선택 탭 -->
       <div>
         <div class="flex justify-between items-center mb-2">
           <label class="text-xs font-bold text-slate-600">기관 및 부처별 필터</label>
@@ -110,12 +106,10 @@
           <button class="ministry-btn active shrink-0 px-3 py-1.5 rounded-lg border transition bg-blue-600 text-white border-blue-600" data-value="all">전체 (9)</button>
           
           <span class="h-4 w-px bg-slate-200 shrink-0 mx-1"></span>
-          <!-- 전문 연구·평가기관 그룹 -->
           <button class="ministry-btn shrink-0 px-3 py-1.5 rounded-lg border transition bg-teal-50 text-teal-800 border-teal-300 hover:bg-teal-100 font-bold" data-value="직업능력심사평가원">직업능력심사평가원</button>
           <button class="ministry-btn shrink-0 px-3 py-1.5 rounded-lg border transition bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100 font-bold" data-value="한국직업능력연구원">한국직업능력연구원</button>
           
           <span class="h-4 w-px bg-slate-200 shrink-0 mx-1"></span>
-          <!-- 중앙행정부처 그룹 -->
           <button class="ministry-btn shrink-0 px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="고용노동부">고용노동부</button>
           <button class="ministry-btn shrink-0 px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="과기정통부">과기정통부</button>
           <button class="ministry-btn shrink-0 px-3 py-1.5 rounded-lg border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-value="중소벤처부">중소벤처부</button>
@@ -160,7 +154,6 @@
   </div>
 
   <script>
-    // 3차 교차 검증 완료 데이터셋 (총 9개 기관 1:1 매핑)
     const policyData = [
       {
         id: 1,
@@ -182,7 +175,7 @@
         ministry: '한국직업능력연구원',
         category: '인재양성·정책연구',
         hasUpdate: true,
-        actualDate: '2026.08.27',
+        actualDate: '2026.08.28',
         title: '일학습병행 청년 재직자의 지방 정착 효과 및 직업훈련 성과 분석 보고',
         summary: [
           '일학습병행 참여 청년의 비수도권 정착률 분석 및 일자리 지속성 제고 방안 발표',
@@ -197,7 +190,7 @@
         ministry: '과기정통부',
         category: 'AI·신기술',
         hasUpdate: true,
-        actualDate: '2026.08.27',
+        actualDate: '2026.08.28',
         title: '2026년도 국가 R&D 예산안 첨단 AI·바이오 투자 확대',
         summary: [
           '3대 게임체인저(AI·반도체, 바이오, 양자) 및 피지컬 AI 집중 투자',
@@ -211,7 +204,7 @@
         ministry: '중소벤처부',
         category: '창업·스타트업',
         hasUpdate: true,
-        actualDate: '2026.08.27',
+        actualDate: '2026.08.28',
         title: '글로벌 펀드 결성 및 「모두의 창업 프로젝트」 1만 명 접수',
         summary: [
           '청년·예비창업자 1만 명 규모 선발 접수 진행 중',
@@ -225,7 +218,7 @@
         ministry: '고용노동부',
         category: 'K-DT·AI캠퍼스',
         hasUpdate: true,
-        actualDate: '2026.08.27',
+        actualDate: '2026.08.28',
         title: '2학기 K-디지털 트레이닝(KDT) 훈련과정 및 청년 일경험 매칭',
         summary: [
           '첨단·디지털 분야 벤처·스타트업 아카데미 집중 훈련생 모집 점검',
@@ -239,7 +232,7 @@
         ministry: '산업통상부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.28 검증',
+        actualDate: '2026.08.31 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 산업통상·수출·첨단 제조 AI 분야 신규 보도자료 없음',
@@ -253,7 +246,7 @@
         ministry: '교육부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.28 검증',
+        actualDate: '2026.08.31 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 대학·부트캠프·인재양성 관련 신규 공식 발표 없음',
@@ -267,7 +260,7 @@
         ministry: '재정경제부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.28 검증',
+        actualDate: '2026.08.31 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 청년·일자리·스타트업 세제 관련 신규 공식 발표 없음',
@@ -281,7 +274,7 @@
         ministry: '행정안전부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.28 검증',
+        actualDate: '2026.08.31 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 디지털정부·공공데이터·청년마을 일자리 관련 신규 발표 없음',
@@ -321,7 +314,6 @@
     }
 
     function renderCards() {
-      // 1) 필터링
       let filtered = policyData.filter(item => {
         const matchMinistry = currentMinistry === 'all' || item.ministry === currentMinistry;
         const matchCategory = currentCategory === 'all' || item.category === currentCategory;
@@ -332,7 +324,6 @@
         return matchMinistry && matchCategory && matchSearch;
       });
 
-      // 2) 신규 발표 우선 & 최신 공고일 순 정렬
       filtered.sort((a, b) => {
         if (a.hasUpdate !== b.hasUpdate) return a.hasUpdate ? -1 : 1;
         return b.actualDate.localeCompare(a.actualDate);
@@ -440,13 +431,12 @@
       renderCards();
     });
 
-    // 메신저(Slack, Teams, 잔디) 최적화 마크다운 텍스트 복사 로직
     document.getElementById('copySlackBtn').addEventListener('click', () => {
       const activeList = policyData.filter(d => d.hasUpdate);
       const emptyList = policyData.filter(d => !d.hasUpdate).map(d => d.ministry);
 
       let summaryText = `📢 *[정부지원사업그룹] 주요 부처 및 심평원·직능연 보도자료 모니터링*\n`;
-      summaryText += `🗓️ _기준일시: 2026.08.28 07:00 (3차 교차검증 완료)_\n\n`;
+      summaryText += `🗓️ _기준일시: 2026.08.31 07:00 (3차 교차검증 완료)_\n\n`;
       
       if (activeList.length > 0) {
         summaryText += `━━━━━━━━━━━━━━━━━━━━━━\n`;
