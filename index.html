@@ -39,9 +39,9 @@
             </span>
           </div>
           <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5 flex-wrap">
-            <span>고용부 · 과기부 · 중소벤처부 · 산업통상부 · 교육부 · 재정경제부 · 행안부 · <strong>직업능력심사평가원(공지/보도)</strong> · <strong>한국직업능력연구원</strong></span>
+            <span>고용부 · 과기부 · 중소벤처부 · 산업통상부 · 교육부 · 재정경제부 · 행안부 · <strong>직업능력심사평가원</strong> · <strong>한국직업능력연구원</strong></span>
             <span class="hidden sm:inline text-slate-300">|</span>
-            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.08.31 09:00</strong></span>
+            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.09.01 07:00</strong></span>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@
     <section class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
       <div class="relative">
         <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input type="text" id="searchInput" placeholder="기관명, 공지사항, 정책명 검색 (예: 직업능력심사평가원 공지, KDT, AI캠퍼스, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
+        <input type="text" id="searchInput" placeholder="기관명, 공지사항, 정책명 검색 (예: 직업능력심사평가원, KDT, AI캠퍼스, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
       </div>
 
       <!-- 기관 및 부처 선택 탭 -->
@@ -154,30 +154,29 @@
   </div>
 
   <script>
-    // 직업능력심사평가원(공지사항 + 보도자료/공고 듀얼 링크) 및 전 부처 데이터셋
     const policyData = [
       {
         id: 1,
         ministry: '직업능력심사평가원',
         category: 'K-DT·AI캠퍼스',
         hasUpdate: true,
-        actualDate: '2026.08.28',
+        actualDate: '2026.08.31',
         title: '2026년도 하반기 K-디지털 트레이닝(K-DT) 신규 훈련과정 공모 및 AI 캠퍼스 심사 계획',
         summary: [
-          '심사평가공고 및 공지사항 > K-디지털 트레이닝 구분 심사 절차 개시',
+          '소통마당 > 공지사항 및 심사평가공고 > K-디지털 트레이닝 심사 절차 개시',
           '생성형 AI, 피지컬 AI, 로봇 등 첨단 융합 훈련과정 및 기업 맞춤형 트랙 평가',
           'AI 캠퍼스 등 디지털 핵심 실무인재 양성 인프라 적합성 심사'
         ],
         support: '훈련비 100% 국비 지원 및 AI 실습 인프라 심사 연계',
-        boardUrl: 'https://www.ksqa.or.kr/sub/info/notice_list.do?board_id=NOTICE_KDT', // 심사평가공고(KDT)
-        noticeUrl: 'https://www.ksqa.or.kr/sub/info/notice_list.do' // 공지사항(KDT)
+        boardUrl: 'https://www.ksqa.or.kr',
+        noticeUrl: 'https://www.ksqa.or.kr'
       },
       {
         id: 2,
         ministry: '한국직업능력연구원',
         category: '인재양성·정책연구',
         hasUpdate: true,
-        actualDate: '2026.08.28',
+        actualDate: '2026.08.31',
         title: '일학습병행 청년 재직자의 지방 정착 효과 및 직업훈련 성과 분석 보고',
         summary: [
           '일학습병행 참여 청년의 비수도권 정착률 분석 및 일자리 지속성 제고 방안 발표',
@@ -192,7 +191,7 @@
         ministry: '과기정통부',
         category: 'AI·신기술',
         hasUpdate: true,
-        actualDate: '2026.08.28',
+        actualDate: '2026.08.31',
         title: '2026년도 국가 R&D 예산안 첨단 AI·바이오 투자 확대',
         summary: [
           '3대 게임체인저(AI·반도체, 바이오, 양자) 및 피지컬 AI 집중 투자',
@@ -206,7 +205,7 @@
         ministry: '중소벤처부',
         category: '창업·스타트업',
         hasUpdate: true,
-        actualDate: '2026.08.28',
+        actualDate: '2026.08.31',
         title: '글로벌 펀드 결성 및 「모두의 창업 프로젝트」 1만 명 접수',
         summary: [
           '청년·예비창업자 1만 명 규모 선발 접수 진행 중',
@@ -220,8 +219,8 @@
         ministry: '고용노동부',
         category: 'K-DT·AI캠퍼스',
         hasUpdate: true,
-        actualDate: '2026.08.28',
-        title: '2학기 K-디지털 트레이닝(KDT) 훈련과정 및 청년 일경험 매칭',
+        actualDate: '2026.08.31',
+        title: '2학기 K-디지털 트레이닝(KDT) 훈련과정 및 청년 일경험 매칭 점검',
         summary: [
           '첨단·디지털 분야 벤처·스타트업 아카데미 집중 훈련생 모집 점검',
           '민간 주도 청년 일경험(인턴십) 패스트트랙 운영'
@@ -234,7 +233,7 @@
         ministry: '산업통상부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.31 검증',
+        actualDate: '2026.09.01 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 산업통상·수출·첨단 제조 AI 분야 신규 보도자료 없음',
@@ -248,7 +247,7 @@
         ministry: '교육부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.31 검증',
+        actualDate: '2026.09.01 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 대학·부트캠프·인재양성 관련 신규 공식 발표 없음',
@@ -262,7 +261,7 @@
         ministry: '재정경제부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.31 검증',
+        actualDate: '2026.09.01 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 청년·일자리·스타트업 세제 관련 신규 공식 발표 없음',
@@ -276,7 +275,7 @@
         ministry: '행정안전부',
         category: '일반',
         hasUpdate: false,
-        actualDate: '2026.08.31 검증',
+        actualDate: '2026.09.01 검증',
         title: '당일 지정 키워드 관련 신규 보도자료 없음',
         summary: [
           '최근 1일간 디지털정부·공공데이터·청년마을 일자리 관련 신규 발표 없음',
@@ -398,12 +397,6 @@
                 💰 ${item.support}
               </span>
               <div class="flex items-center gap-2 shrink-0">
-                ${isKSQA && item.noticeUrl ? `
-                  <a href="${item.noticeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold text-teal-600 hover:text-teal-700 bg-teal-50 px-2 py-1 rounded-md border border-teal-200">
-                    공지사항
-                    <i class="ph-bold ph-arrow-up-right text-[10px]"></i>
-                  </a>
-                ` : ''}
                 <a href="${item.boardUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold ${isSpecialOrg ? 'text-teal-700 hover:text-teal-800' : 'text-blue-600 hover:text-blue-700'}">
                   보도자료 바로가기
                   <i class="ph-bold ph-arrow-up-right"></i>
@@ -447,7 +440,7 @@
       const emptyList = policyData.filter(d => !d.hasUpdate).map(d => d.ministry);
 
       let summaryText = `📢 *[정부지원사업그룹] 주요 부처 및 심평원(공지/보도)·직능연 보도자료 모니터링*\n`;
-      summaryText += `🗓️ _기준일시: 2026.08.31 09:00 (3차 교차검증 완료)_\n\n`;
+      summaryText += `🗓️ _기준일시: 2026.09.01 07:00 (3차 교차검증 완료)_\n\n`;
       
       if (activeList.length > 0) {
         summaryText += `━━━━━━━━━━━━━━━━━━━━━━\n`;
