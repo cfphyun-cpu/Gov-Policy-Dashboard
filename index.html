@@ -39,9 +39,9 @@
             </span>
           </div>
           <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5 flex-wrap">
-            <span>고용부 · 과기부 · 중소벤처부 · 산업통상부 · 교육부 · 재정경제부 · 행안부 · <strong>직업능력심사평가원</strong> · <strong>한국직업능력연구원</strong></span>
+            <span>고용부 · 과기부 · 중소벤처부 · 산업통상부 · 교육부 · 재정경제부 · 행안부 · <strong>직업능력심사평가원(공지/보도)</strong> · <strong>한국직업능력연구원</strong></span>
             <span class="hidden sm:inline text-slate-300">|</span>
-            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.08.31 07:00</strong></span>
+            <span class="text-slate-400 font-medium">최종 업데이트: <strong class="text-slate-600">2026.08.31 09:00</strong></span>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-        <p class="text-xs font-semibold text-teal-600">심평원·KDT / HRD</p>
+        <p class="text-xs font-semibold text-teal-600">심평원(공지·보도) / HRD</p>
         <div class="flex items-baseline justify-between mt-2">
           <span id="stat-ksqa" class="text-2xl font-bold text-teal-700">0</span>
           <span class="text-xs text-teal-400 font-medium">건</span>
@@ -93,7 +93,7 @@
     <section class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
       <div class="relative">
         <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input type="text" id="searchInput" placeholder="기관명, 정책명, 키워드 검색 (예: 직업능력심사평가원, KDT, AI캠퍼스, 반도체, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
+        <input type="text" id="searchInput" placeholder="기관명, 공지사항, 정책명 검색 (예: 직업능력심사평가원 공지, KDT, AI캠퍼스, 부트캠프)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition" />
       </div>
 
       <!-- 기관 및 부처 선택 탭 -->
@@ -154,6 +154,7 @@
   </div>
 
   <script>
+    // 직업능력심사평가원(공지사항 + 보도자료/공고 듀얼 링크) 및 전 부처 데이터셋
     const policyData = [
       {
         id: 1,
@@ -163,12 +164,13 @@
         actualDate: '2026.08.28',
         title: '2026년도 하반기 K-디지털 트레이닝(K-DT) 신규 훈련과정 공모 및 AI 캠퍼스 심사 계획',
         summary: [
-          '심사평가공고 > K-디지털 트레이닝 구분 공고 심사 절차 개시',
+          '심사평가공고 및 공지사항 > K-디지털 트레이닝 구분 심사 절차 개시',
           '생성형 AI, 피지컬 AI, 로봇 등 첨단 융합 훈련과정 및 기업 맞춤형 트랙 평가',
           'AI 캠퍼스 등 디지털 핵심 실무인재 양성 인프라 적합성 심사'
         ],
         support: '훈련비 100% 국비 지원 및 AI 실습 인프라 심사 연계',
-        boardUrl: 'https://www.ksqa.or.kr/sub/info/notice_list.do?board_id=NOTICE_KDT'
+        boardUrl: 'https://www.ksqa.or.kr/sub/info/notice_list.do?board_id=NOTICE_KDT', // 심사평가공고(KDT)
+        noticeUrl: 'https://www.ksqa.or.kr/sub/info/notice_list.do' // 공지사항(KDT)
       },
       {
         id: 2,
@@ -365,7 +367,8 @@
           `;
         }
 
-        const isSpecialOrg = item.ministry === '직업능력심사평가원' || item.ministry === '한국직업능력연구원';
+        const isKSQA = item.ministry === '직업능력심사평가원';
+        const isSpecialOrg = isKSQA || item.ministry === '한국직업능력연구원';
 
         return `
           <div class="bg-white rounded-xl border ${isSpecialOrg ? 'border-teal-300 ring-1 ring-teal-100 shadow-sm' : 'border-slate-200 shadow-xs'} p-4 sm:p-5 flex flex-col justify-between hover:border-slate-400 transition duration-150">
@@ -390,14 +393,22 @@
                 `).join('')}
               </ul>
             </div>
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs gap-2">
-              <span class="text-slate-500 font-medium truncate max-w-[170px]" title="${item.support}">
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs gap-2 flex-wrap">
+              <span class="text-slate-500 font-medium truncate max-w-[140px]" title="${item.support}">
                 💰 ${item.support}
               </span>
-              <a href="${item.boardUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold shrink-0 ${isSpecialOrg ? 'text-teal-700 hover:text-teal-800' : 'text-blue-600 hover:text-blue-700'}">
-                보도자료 바로가기
-                <i class="ph-bold ph-arrow-up-right"></i>
-              </a>
+              <div class="flex items-center gap-2 shrink-0">
+                ${isKSQA && item.noticeUrl ? `
+                  <a href="${item.noticeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold text-teal-600 hover:text-teal-700 bg-teal-50 px-2 py-1 rounded-md border border-teal-200">
+                    공지사항
+                    <i class="ph-bold ph-arrow-up-right text-[10px]"></i>
+                  </a>
+                ` : ''}
+                <a href="${item.boardUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-semibold ${isSpecialOrg ? 'text-teal-700 hover:text-teal-800' : 'text-blue-600 hover:text-blue-700'}">
+                  보도자료 바로가기
+                  <i class="ph-bold ph-arrow-up-right"></i>
+                </a>
+              </div>
             </div>
           </div>
         `;
@@ -435,8 +446,8 @@
       const activeList = policyData.filter(d => d.hasUpdate);
       const emptyList = policyData.filter(d => !d.hasUpdate).map(d => d.ministry);
 
-      let summaryText = `📢 *[정부지원사업그룹] 주요 부처 및 심평원·직능연 보도자료 모니터링*\n`;
-      summaryText += `🗓️ _기준일시: 2026.08.31 07:00 (3차 교차검증 완료)_\n\n`;
+      let summaryText = `📢 *[정부지원사업그룹] 주요 부처 및 심평원(공지/보도)·직능연 보도자료 모니터링*\n`;
+      summaryText += `🗓️ _기준일시: 2026.08.31 09:00 (3차 교차검증 완료)_\n\n`;
       
       if (activeList.length > 0) {
         summaryText += `━━━━━━━━━━━━━━━━━━━━━━\n`;
@@ -444,10 +455,11 @@
         summaryText += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
         
         summaryText += activeList.map((item, idx) => {
+          let links = `  🔗 *보도자료/공고:* ${item.boardUrl}`;
+          if (item.noticeUrl) links += `\n  🔗 *공지사항:* ${item.noticeUrl}`;
           return `*${idx + 1}. [${item.ministry}] ${item.title}* (${item.actualDate})\n` +
                  item.summary.map(s => `  • ${s}`).join('\n') + `\n` +
-                 `  👉 *지원규모:* ${item.support}\n` +
-                 `  🔗 *원문링크:* ${item.boardUrl}`;
+                 `  👉 *지원규모:* ${item.support}\n` + links;
         }).join('\n\n') + `\n\n`;
       }
 
